@@ -98,8 +98,13 @@ p.lead{color:var(--sub);max-width:560px}
 .notify{background-image:var(--noise),linear-gradient(180deg,#5f5f5b,#464643);background-blend-mode:multiply,normal}
 .notify .label{color:#d0d0cc}
 .notify p.lead{color:#e2e2df}
-form{display:flex;gap:8px;margin-top:28px;max-width:480px}
-input{flex:1;min-width:0;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.25);border-radius:2px;padding:13px 14px;color:var(--white);font:inherit;font-size:15px}
+form{margin-top:28px;max-width:480px}
+.field{display:flex;gap:8px}
+.agree{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:14px;color:#e2e2df;cursor:pointer}
+.agree input{flex:none;width:16px;height:16px;padding:0;accent-color:#d8d8d5}
+.privacy{margin-top:6px;font-size:12px;color:#c4c4c0;line-height:1.6}
+.flash:disabled{opacity:.6;cursor:default}
+input[type=email]{flex:1;min-width:0;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.25);border-radius:2px;padding:13px 14px;color:var(--white);font:inherit;font-size:15px}
 input::placeholder{color:rgba(255,255,255,.5)}
 .done{margin-top:12px;font-size:13px;color:#e2e2df;min-height:20px}
 
@@ -210,10 +215,14 @@ footer .brand .icon{width:26px}
       <h2>첫 드롭 소식 받기</h2>
       <p class="lead">출시와 펀딩 오픈 소식을 가장 먼저 알려드립니다.</p>
       <form id="form">
-        <input type="email" id="email" placeholder="이메일 주소" required>
-        <button class="flash" type="submit">신청</button>
+        <div class="field">
+          <input type="email" id="email" placeholder="이메일 주소" required>
+          <button class="flash" type="submit" id="submit">신청</button>
+        </div>
+        <label class="agree"><input type="checkbox" id="agree" required> 개인정보 수집·이용에 동의합니다.</label>
+        <p class="privacy">수집 항목: 이메일 · 이용 목적: GWANG 출시 및 펀딩 소식 안내 · 보관 기간: 첫 출시 안내 후 즉시 파기</p>
       </form>
-      <p class="done" id="done"></p>
+      <p class="done" id="done" aria-live="polite"></p>
     </div>
   </div>
 </section>
@@ -250,12 +259,25 @@ document.getElementById('flash').addEventListener('click', e => {
   e.target.textContent = on ? '플래시 끄기' : '플래시 켜기';
 });
 
-// 알림 신청: 서버가 없어서 메일 앱으로 연결
-document.getElementById('form').addEventListener('submit', e => {
+// 알림 신청: 구글 설문지(GWANG 출시 알림)로 전송 → 응답 탭 / 연결된 스프레드시트에 쌓임
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScwWi-QF434gZ7VzlAe8iI6qnKhL86dTdKhCltz8rwWs1CEJA/formResponse';
+document.getElementById('form').addEventListener('submit', async e => {
   e.preventDefault();
-  const v = document.getElementById('email').value;
-  location.href = `mailto:kgs2632947@naver.com?subject=${encodeURIComponent('GWANG 출시 알림 신청')}&body=${encodeURIComponent(v)}`;
-  document.getElementById('done').textContent = '메일 앱이 열리면 그대로 보내주세요.';
+  const btn = document.getElementById('submit');
+  const done = document.getElementById('done');
+  const body = new URLSearchParams({
+    'entry.1370379313': document.getElementById('email').value.trim(), // 이메일 주소
+    'entry.1985318228': '동의합니다.'                                    // 개인정보 동의
+  });
+  btn.disabled = true; btn.textContent = '전송 중';
+  try {
+    await fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body });
+    e.target.reset();
+    done.textContent = '신청이 완료되었습니다. 첫 드롭 소식으로 찾아뵙겠습니다.';
+  } catch {
+    done.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해주세요.';
+  }
+  btn.disabled = false; btn.textContent = '신청';
 });
 </script>
 </body>
