@@ -62,7 +62,7 @@ p.lead{color:var(--sub);max-width:560px}
 .pair div{border:1px solid var(--line-hi);border-radius:2px;padding:24px;background:rgba(255,255,255,.015)}
 .pair b{display:block;font-family:"Noto Serif KR",serif;font-size:48px;line-height:1;margin-bottom:14px}
 /* 첫 화면과 같은 표현: 狂은 빛이 없는 회색 테두리, 光은 빛나는 스틸 */
-.pair div:first-child b{color:transparent;-webkit-text-stroke:1.5px #6a6a68}
+.pair div:first-child b{color:var(--text)}
 .pair div:last-child b{background:var(--steel);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(255,255,255,.3))}
 .pair small{display:block;color:var(--mute);font-size:13px;margin-bottom:6px}
 .pair p{font-size:15px;color:var(--sub)}
@@ -100,7 +100,7 @@ p.lead{color:var(--sub);max-width:560px}
 .person .tag{display:block;margin-top:8px;font-size:12px;color:var(--sub)}
 .person .soon{font-size:15px;color:var(--mute);letter-spacing:.14em}
 .soon-card{position:relative}
-.soon-card .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;text-align:center}
+.soon-card .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1.5;text-align:center}
 
 /* notify */
 .notify{background-image:var(--noise),linear-gradient(180deg,#5f5f5b,#464643);background-blend-mode:multiply,normal}
@@ -214,7 +214,7 @@ footer .brand .icon{width:26px}
       <div class="people">
         <div class="person"><div><span class="no en">No. 01</span><span class="tag en">Run · Night</span></div><strong>달리는 MAD</strong></div>
         <div class="person"><div><span class="no en">No. 02</span><span class="tag en">Lift · Daily</span></div><strong>헬스하는 MAD</strong></div>
-        <div class="person soon-card"><div><span class="no en">No. 03</span></div><strong class="en soon">Coming soon</strong></div>
+        <div class="person soon-card"><div><span class="no en">No. 03</span></div><strong class="en soon">Coming<br>soon</strong></div>
       </div>
     </div>
   </div>
